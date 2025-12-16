@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/vibium/clicker/internal/bidi"
 	"github.com/vibium/clicker/internal/browser"
 	"github.com/vibium/clicker/internal/paths"
 	"github.com/vibium/clicker/internal/process"
@@ -90,6 +92,47 @@ func main() {
 			// Wait for signal, then cleanup
 			process.WaitForSignal()
 			result.Close()
+		},
+	})
+
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "ws-test [url]",
+		Short: "Test WebSocket connection (type messages, see echoes)",
+		Args:  cobra.ExactArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			url := args[0]
+			fmt.Printf("Connecting to %s...\n", url)
+
+			conn, err := bidi.Connect(url)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+				os.Exit(1)
+			}
+			defer conn.Close()
+
+			fmt.Println("Connected! Type messages (Ctrl+C to quit):")
+
+			// Read responses in background
+			go func() {
+				for {
+					msg, err := conn.Receive()
+					if err != nil {
+						return
+					}
+					fmt.Printf("< %s\n", msg)
+				}
+			}()
+
+			// Read input and send
+			scanner := bufio.NewScanner(os.Stdin)
+			for scanner.Scan() {
+				msg := scanner.Text()
+				if err := conn.Send(msg); err != nil {
+					fmt.Fprintf(os.Stderr, "Send error: %v\n", err)
+					break
+				}
+				fmt.Printf("> %s\n", msg)
+			}
 		},
 	})
 
