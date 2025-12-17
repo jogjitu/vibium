@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/base64"
 	"fmt"
 	"os"
 
@@ -217,6 +218,65 @@ func main() {
 			fmt.Printf("  Navigation ID: %s\n", result.Navigation)
 		},
 	})
+
+	screenshotCmd := &cobra.Command{
+		Use:   "screenshot [url]",
+		Short: "Navigate to a URL and capture a screenshot",
+		Args:  cobra.ExactArgs(1),
+		Run: func(cmd *cobra.Command, args []string) {
+			url := args[0]
+			output, _ := cmd.Flags().GetString("output")
+
+			fmt.Println("Launching browser...")
+			launchResult, err := browser.Launch(browser.LaunchOptions{Headless: true})
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error launching browser: %v\n", err)
+				os.Exit(1)
+			}
+			defer launchResult.Close()
+
+			fmt.Println("Connecting to BiDi...")
+			conn, err := bidi.Connect(launchResult.WebSocketURL)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error connecting: %v\n", err)
+				os.Exit(1)
+			}
+			defer conn.Close()
+
+			client := bidi.NewClient(conn)
+
+			fmt.Printf("Navigating to %s...\n", url)
+			_, err = client.Navigate("", url)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error navigating: %v\n", err)
+				os.Exit(1)
+			}
+
+			fmt.Println("Capturing screenshot...")
+			base64Data, err := client.CaptureScreenshot("")
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error capturing screenshot: %v\n", err)
+				os.Exit(1)
+			}
+
+			// Decode base64 to PNG bytes
+			pngData, err := base64.StdEncoding.DecodeString(base64Data)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error decoding screenshot: %v\n", err)
+				os.Exit(1)
+			}
+
+			// Save to file
+			if err := os.WriteFile(output, pngData, 0644); err != nil {
+				fmt.Fprintf(os.Stderr, "Error saving screenshot: %v\n", err)
+				os.Exit(1)
+			}
+
+			fmt.Printf("Screenshot saved to %s (%d bytes)\n", output, len(pngData))
+		},
+	}
+	screenshotCmd.Flags().StringP("output", "o", "screenshot.png", "Output file path")
+	rootCmd.AddCommand(screenshotCmd)
 
 	rootCmd.Version = version
 	rootCmd.SetVersionTemplate("Clicker v{{.Version}}\n")
