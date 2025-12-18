@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"encoding/base64"
 	"fmt"
 	"os"
@@ -12,6 +13,7 @@ import (
 	"github.com/vibium/clicker/internal/browser"
 	"github.com/vibium/clicker/internal/paths"
 	"github.com/vibium/clicker/internal/process"
+	"github.com/vibium/clicker/internal/proxy"
 )
 
 var version = "0.1.0"
@@ -526,6 +528,56 @@ func main() {
 			fmt.Printf("Typed \"%s\", value is now: %s\n", text, value)
 		},
 	})
+
+	serveCmd := &cobra.Command{
+		Use:   "serve",
+		Short: "Start WebSocket proxy server for browser automation",
+		Example: `  clicker serve
+  # Starts server on default port 9515, headless mode
+
+  clicker serve --port 8080
+  # Starts server on port 8080
+
+  clicker serve --headed
+  # Starts server with visible browser windows`,
+		Run: func(cmd *cobra.Command, args []string) {
+			port, _ := cmd.Flags().GetInt("port")
+
+			fmt.Printf("Starting Clicker proxy server on port %d...\n", port)
+
+			// Create router to manage browser sessions
+			router := proxy.NewRouter(!headed)
+
+			server := proxy.NewServer(
+				proxy.WithPort(port),
+				proxy.WithOnConnect(router.OnClientConnect),
+				proxy.WithOnMessage(router.OnClientMessage),
+				proxy.WithOnClose(router.OnClientDisconnect),
+			)
+
+			if err := server.Start(); err != nil {
+				fmt.Fprintf(os.Stderr, "Error starting server: %v\n", err)
+				os.Exit(1)
+			}
+
+			fmt.Printf("Server listening on ws://localhost:%d\n", port)
+			fmt.Println("Press Ctrl+C to stop...")
+
+			// Wait for signal
+			process.WaitForSignal()
+
+			fmt.Println("\nShutting down...")
+
+			// Close all browser sessions
+			router.CloseAll()
+
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			server.Stop(ctx)
+		},
+	}
+	serveCmd.Flags().IntP("port", "p", 9515, "Port to listen on")
+	rootCmd.AddCommand(serveCmd)
 
 	rootCmd.Version = version
 	rootCmd.SetVersionTemplate("Clicker v{{.Version}}\n")
