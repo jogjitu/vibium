@@ -42,7 +42,7 @@ See [V2-ROADMAP.md](V2-ROADMAP.md) for:
 
 ---
 
-## Day 1: Project Bootstrap
+## ✅ Day 1: Project Bootstrap
 
 ### Milestone 1.1: Monorepo Scaffold
 ```
@@ -101,7 +101,7 @@ node -e "const { browser } = require('./dist'); console.log(typeof browser.launc
 
 ---
 
-## Day 2: Browser Detection & Installation
+## ✅ Day 2: Browser Detection & Installation
 
 ### Milestone 2.1: Platform Paths
 ```
@@ -182,7 +182,7 @@ ps aux | grep chrome  # Chrome should be gone
 
 ---
 
-## Day 3: WebSocket & BiDi Basics
+## ✅ Day 3: WebSocket & BiDi Basics
 
 ### Milestone 3.1: WebSocket Connection
 ```
@@ -226,7 +226,7 @@ Implement internal/bidi/session.go:
 
 ---
 
-## Day 4: Navigation & Screenshots
+## ✅ Day 4: Navigation & Screenshots
 
 ### Milestone 4.1: Browsing Context
 ```
@@ -270,7 +270,7 @@ Implement internal/bidi/script.go:
 
 ---
 
-## Day 5: Element Finding & Input
+## ✅ Day 5: Element Finding & Input
 
 ### Milestone 5.1: Element Location
 ```
@@ -327,7 +327,7 @@ Verify before proceeding: ✅ 2025-12-16 22:29 CST
 
 ---
 
-## Day 6: BiDi Proxy Server
+## ✅ Day 6: BiDi Proxy Server
 
 ### Milestone 6.1: WebSocket Server
 ```
@@ -391,7 +391,7 @@ Disconnected from proxy
 
 ---
 
-## Day 7: JS Client - Async API
+## ✅ Day 7: JS Client - Async API
 
 ### Milestone 7.1: Binary Manager
 ```
