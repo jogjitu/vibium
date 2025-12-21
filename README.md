@@ -202,6 +202,8 @@ See [V2-ROADMAP.md](V2-ROADMAP.md) for planned features:
 
 ## Updates
 
+- [2025-12-20: Day 10 - MCP Server](docs/updates/2025-12-20-day10-mcp.md)
+- [2025-12-19: Day 9 - Actionability](docs/updates/2025-12-19-day9-actionability.md)
 - [2025-12-19: Day 8 - Elements & Sync API](docs/updates/2025-12-19-day8-elements-sync.md)
 - [2025-12-17: Halfway There](docs/updates/2025-12-17-halfway-there.md)
 - [2025-12-16: Week 1 Progress](docs/updates/2025-12-16-week1-progress.md)
