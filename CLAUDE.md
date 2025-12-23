@@ -22,6 +22,15 @@ V1 by Christmas. Start with Day 1 in V1-ROADMAP.md.
 - WebDriver BiDi protocol
 - MCP server (stdio)
 
+## Design Philosophy
+
+Optimize for first-time user/developer joy. Defaults should create an "aha!" moment:
+- Browser visible by default (see what the AI is doing)
+- Screenshots save to a sensible location automatically
+- Zero config needed to get started
+
+Power users can override defaults (headless mode, custom paths, etc.) when needed.
+
 ## Rules
 
 - Follow V1-ROADMAP.md one milestone at a time

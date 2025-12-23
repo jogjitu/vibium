@@ -49,3 +49,6 @@ packages/*/bin/
 
 # Test screenshots
 screenshots/
+
+# NPM package tarballs
+*.tgz

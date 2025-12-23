@@ -791,7 +791,7 @@ ls -la clicker/bin/
 file clicker/bin/clicker-linux-amd64  # Should show static binary
 ```
 
-### Milestone 12.2: Platform NPM Packages
+### ✅ Milestone 12.2: Platform NPM Packages
 
 > **Detailed Plan:** [docs/plans/V1-MILESTONE-12.2.md](docs/plans/V1-MILESTONE-12.2.md)
 
@@ -816,7 +816,7 @@ Each package.json:
 - os and cpu fields for npm filtering
 ```
 
-### Milestone 12.3: Main Package with Postinstall
+### ✅ Milestone 12.3: Main Package with Postinstall
 ```
 Create packages/vibium/:
 - Re-exports clients/javascript
@@ -834,7 +834,7 @@ package.json:
 - "scripts": { "postinstall": "node postinstall.js" }
 ```
 
-### Milestone 12.4: npx MCP Entry Point
+### ✅ Milestone 12.4: npx MCP Entry Point
 ```
 Create packages/vibium/bin.js:
 - Finds platform-specific clicker binary from optional deps
@@ -845,18 +845,7 @@ Update packages/vibium/package.json:
 - "bin": { "vibium": "./bin.js" }
 ```
 
-**Checkpoint:**
-```bash
-# Test locally
-cd packages/vibium && npm link
-npx vibium
-# Should start MCP server (waiting for JSON-RPC on stdin)
-
-# Test Claude Code integration
-claude mcp add vibium -- npx -y vibium
-claude mcp list
-# Should show vibium as configured MCP server
-```
+(Code completed in 12.3. Checkpoint merged into 12.5.)
 
 ### Milestone 12.5: End-to-End Package Test
 ```

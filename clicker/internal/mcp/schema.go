@@ -12,7 +12,7 @@ func GetToolSchemas() []Tool {
 					"headless": map[string]interface{}{
 						"type":        "boolean",
 						"description": "Run browser in headless mode (no visible window)",
-						"default":     true,
+						"default":     false,
 					},
 				},
 			},

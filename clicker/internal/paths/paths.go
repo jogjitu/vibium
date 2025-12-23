@@ -194,3 +194,23 @@ func getSystemChromePath() (string, error) {
 func GetPlatformString() string {
 	return getPlatformString()
 }
+
+// GetScreenshotDir returns the platform-specific default directory for screenshots.
+// macOS: ~/Pictures/Vibium/
+// Linux: ~/Pictures/Vibium/
+// Windows: %USERPROFILE%\Pictures\Vibium\
+func GetScreenshotDir() (string, error) {
+	home, err := os.UserHomeDir()
+	if err != nil {
+		return "", err
+	}
+
+	switch runtime.GOOS {
+	case "windows":
+		// Windows uses Pictures folder in user profile
+		return filepath.Join(home, "Pictures", "Vibium"), nil
+	default:
+		// macOS and Linux use ~/Pictures/Vibium
+		return filepath.Join(home, "Pictures", "Vibium"), nil
+	}
+}

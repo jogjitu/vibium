@@ -21,7 +21,7 @@ type Handlers struct {
 }
 
 // NewHandlers creates a new Handlers instance.
-// screenshotDir is optional - if empty, file saving is disabled.
+// screenshotDir specifies where screenshots are saved. If empty, file saving is disabled.
 func NewHandlers(screenshotDir string) *Handlers {
 	return &Handlers{
 		screenshotDir: screenshotDir,
@@ -71,7 +71,7 @@ func (h *Handlers) browserLaunch(args map[string]interface{}) (*ToolsCallResult,
 	h.Close()
 
 	// Parse options
-	headless := true
+	headless := false // Default: show browser for better first-time UX
 	if val, ok := args["headless"].(bool); ok {
 		headless = val
 	}
@@ -204,7 +204,12 @@ func (h *Handlers) browserScreenshot(args map[string]interface{}) (*ToolsCallRes
 	// If filename provided, save to file (only if screenshotDir is configured)
 	if filename, ok := args["filename"].(string); ok && filename != "" {
 		if h.screenshotDir == "" {
-			return nil, fmt.Errorf("screenshot file saving is disabled. Start clicker mcp with --screenshot-dir to enable")
+			return nil, fmt.Errorf("screenshot file saving is disabled (use --screenshot-dir to enable)")
+		}
+
+		// Create directory if it doesn't exist
+		if err := os.MkdirAll(h.screenshotDir, 0755); err != nil {
+			return nil, fmt.Errorf("failed to create screenshot directory: %w", err)
 		}
 
 		// Use only the basename to prevent path traversal

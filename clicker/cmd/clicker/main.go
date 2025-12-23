@@ -727,14 +727,31 @@ The server provides browser automation tools:
   # Configure in Claude Code
   claude mcp add vibium -- clicker mcp
 
-  # Enable screenshot saving to a directory
+  # Custom screenshot directory
   clicker mcp --screenshot-dir ./screenshots
+
+  # Disable screenshot file saving (inline only)
+  clicker mcp --screenshot-dir ""
 
   # Test with echo
   echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"capabilities":{}}}' | clicker mcp`,
 		Run: func(cmd *cobra.Command, args []string) {
 			process.WithCleanup(func() {
-				screenshotDir, _ := cmd.Flags().GetString("screenshot-dir")
+				var screenshotDir string
+
+				// Check if flag was explicitly set
+				if cmd.Flags().Changed("screenshot-dir") {
+					screenshotDir, _ = cmd.Flags().GetString("screenshot-dir")
+					// Empty string means explicitly disabled
+				} else {
+					// Use platform-specific default
+					defaultDir, err := paths.GetScreenshotDir()
+					if err != nil {
+						fmt.Fprintf(os.Stderr, "Warning: could not determine default screenshot directory: %v\n", err)
+					} else {
+						screenshotDir = defaultDir
+					}
+				}
 
 				server := mcp.NewServer(version, mcp.ServerOptions{
 					ScreenshotDir: screenshotDir,
@@ -748,7 +765,7 @@ The server provides browser automation tools:
 			})
 		},
 	}
-	mcpCmd.Flags().String("screenshot-dir", "", "Directory for saving screenshots (if not set, file saving is disabled)")
+	mcpCmd.Flags().String("screenshot-dir", "", "Directory for saving screenshots (default: ~/Pictures/Vibium, use \"\" to disable)")
 	rootCmd.AddCommand(mcpCmd)
 
 	rootCmd.Version = version
