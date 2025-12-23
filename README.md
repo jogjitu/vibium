@@ -123,7 +123,7 @@ One command to add browser control to Claude Code:
 claude mcp add vibium -- npx -y vibium
 ```
 
-That's it. No `npm install` needed. The first run downloads everything automatically.
+That's it. No manual steps needed. Chrome downloads automatically during setup.
 
 | Tool | Description |
 |------|-------------|
