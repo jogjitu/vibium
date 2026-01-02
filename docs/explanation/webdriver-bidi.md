@@ -38,12 +38,12 @@ That's WebDriver BiDi.
 
 ```
 ┌─────────────┐                    ┌─────────────┐
-│   Client    │◄───WebSocket───────│   Browser   │
-│  (Vibium)   │    (JSON msgs)     │  (Chrome)   │
+│   Client    │◄───WebSocket──────►│   Browser   │
+│  (Vibium)   │    (JSON msgs)     │             │
 └─────────────┘                    └─────────────┘
 ```
 
-The client connects to the browser over WebSocket. Messages are JSON:
+Bidirectional communication over WebSocket. Messages are JSON:
 
 ```json
 {"id": 1, "method": "browsingContext.navigate", "params": {"url": "https://example.com"}}
