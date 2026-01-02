@@ -2,9 +2,21 @@
 
 **Browser automation without the drama.**
 
-Vibium is browser automation infrastructure built for AI agents. A single binary handles browser lifecycle, WebDriver BiDi protocol, and exposes an MCP server — so Claude Code (or any MCP client) can drive a browser with zero setup. Works great for AI agents, test automation, and anything else that needs a browser.
+Vibium is browser automation infrastructure built for AI agents. A single binary handles browser lifecycle, [WebDriver BiDi](docs/explanation/webdriver-bidi.md) protocol, and exposes an MCP server — so Claude Code (or any MCP client) can drive a browser with zero setup. Works great for AI agents, test automation, and anything else that needs a browser.
 
 **New here?** [Getting Started Tutorial](docs/tutorials/getting-started.md) — zero to hello world in 5 minutes.
+
+---
+
+## Why Vibium?
+
+**Browser automation for AI agents and humans.**
+
+- **AI-native.** MCP server built-in. Claude Code can drive a browser out of the box.
+- **Zero config.** One install, browser downloads automatically, visible by default.
+- **Sync API.** No async/await ceremony. Perfect for scripts, REPLs, and agents.
+- **Standards-based.** Built on [WebDriver BiDi](docs/explanation/webdriver-bidi.md), not proprietary protocols controlled by large corporations.
+- **Lightweight.** Single ~10MB binary. No runtime dependencies.
 
 ---
 
@@ -214,6 +226,7 @@ See [V2-ROADMAP.md](V2-ROADMAP.md) for planned features:
 
 ## Updates
 
+- [2025-12-31: Python Client](docs/updates/2025-12-31-python-client.md)
 - [2025-12-22: Day 12 - Published to npm](docs/updates/2025-12-22-day12-npm-publish.md)
 - [2025-12-21: Day 11 - Polish & Error Handling](docs/updates/2025-12-21-day11-polish.md)
 - [2025-12-20: Day 10 - MCP Server](docs/updates/2025-12-20-day10-mcp.md)
