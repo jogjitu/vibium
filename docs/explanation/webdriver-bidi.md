@@ -4,7 +4,7 @@ Vibium is built on WebDriver BiDi, a W3C standard for browser automation. This d
 
 ## A Brief History
 
-### Selenium and WebDriver (2004-2018)
+### Selenium and WebDriver (2004-present)
 
 Browser automation started with Selenium in 2004. It injected JavaScript into pages to simulate user actions — clever, but limited by browser security.
 
